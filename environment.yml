@@ -1,0 +1,17 @@
+name: graph_project_env
+
+channels:
+- conda-forge
+
+dependencies:
+- python=3.10
+- flake8
+- jupyter
+- jupyterlab
+- ipython
+- faker
+- seaborn
+- pip
+- pip:
+  - black
+  - nbqa
