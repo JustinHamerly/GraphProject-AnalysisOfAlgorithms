@@ -1,9 +1,8 @@
-import seaborn as sns
-import matplotlib.pyplot as plt
+from graphviz import Digraph, Graph as UndirectedGraph
 
 class Graph:
-    def init(self, directed=False):
-        self.directed = directed,
+    def __init__(self, directed=False):
+        self.directed = directed
         self.nodes = set()
         self.adjacency_list = {}
 
@@ -37,37 +36,31 @@ class Graph:
             self.adjacency_list[node2].pop(node1, None)
 
     def plot(self):
-        edges = []
-        weights = []
+        graph = Digraph() if self.directed else UndirectedGraph(strict=True)
+        if not self.directed:
+            graph.attr('edge', dir='none')
+        for node in self.nodes:
+            graph.node(str(node))
 
-        for start_node, neighbors in self.adjacency_list.items():
-            for end_node, weight in neighbors.items():
-                edges.append((start_node, end_node))
-                weights.append(weight)
+        for node, neighbors in self.adjacency_list.items():
+            for neighbor, weight in neighbors.items():
+                graph.edge(str(node), str(neighbor), label=str(weight))
         
-        plt.figure(figsize=(10,10))
-        sns.heatmap(self._create_adjacency_matrix(), annot=True, cmap='Blues', cbar=True)
-        plt.title('Graph')
-        plt.xlabel('Nodes')
-        plt.ylabel('Nodes')
-        plt.show()
+        graph.view()
 
-    def _create_adjacency_matrix(self):
-        nodes = sorted(self.nodes)
-        size = len(nodes)
-
-        matrix = [[0] * size for _ in range(size)]
-        node_indicies = {node: i for i,node in enumerate(nodes)}
-
-        for start_node, neighbors in self.adjacency_list.items():
-            for end_node, weight in neighbors.items():
-                matrix[node_indicies[start_node][node_indicies[end_node]]] = weight
-        
-        return matrix
 
     def __repr__(self):
         return '\n'.join(f"{node}: {neighbors}" for node, neighbors in self.adjacency_list.items())
     
 class Node:
     def __init__(self, data):
-        data = data
+        self.data = data
+
+    def __repr__(self):
+        return f"Node({self.data})"
+
+    def __eq__(self, other):
+        return self.data == other.data
+    
+    def __hash__(self):
+        return hash(self.data)

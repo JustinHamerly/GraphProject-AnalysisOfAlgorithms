@@ -9,9 +9,10 @@ dependencies:
 - jupyter
 - jupyterlab
 - ipython
-- faker
 - seaborn
 - pip
+- graphviz
+- python-graphviz
 - pip:
   - black
   - nbqa
