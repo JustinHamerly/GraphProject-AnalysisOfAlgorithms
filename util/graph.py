@@ -34,6 +34,12 @@ class Graph:
             self.adjacency_list[node1].pop(node2, None)
         if not self.directed and node2 in self.adjacency_list:
             self.adjacency_list[node2].pop(node1, None)
+    
+    def update_edge_weight(self, node1, node2, new_weight):
+        if self.adjacency_list[node1][node2]:
+            self.adjacency_list[node1][node2] = new_weight
+            if not self.directed:
+                self.adjacency_list[node2][node1] = new_weight
 
     def plot(self):
         graph = Digraph() if self.directed else UndirectedGraph(strict=True)
@@ -44,7 +50,17 @@ class Graph:
 
         for node, neighbors in self.adjacency_list.items():
             for neighbor, weight in neighbors.items():
-                graph.edge(str(node), str(neighbor), label=str(weight))
+                style = 'dashed' if weight < 1 else 'solid'
+                color = 'gray' if weight < 1 else 'black'
+                penwidth = str(weight) if weight >= 1 else '1'
+                graph.edge(
+                    str(node),
+                    str(neighbor),
+                    label=str(weight),
+                    style=style,
+                    color=color,
+                    penwidth=penwidth
+                )
         
         graph.view()
 
