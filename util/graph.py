@@ -50,7 +50,17 @@ class Graph:
 
         for node, neighbors in self.adjacency_list.items():
             for neighbor, weight in neighbors.items():
-                graph.edge(str(node), str(neighbor), label=str(weight))
+                style = 'dashed' if weight < 1 else 'solid'
+                color = 'gray' if weight < 1 else 'black'
+                penwidth = str(weight) if weight >= 1 else '1'
+                graph.edge(
+                    str(node),
+                    str(neighbor),
+                    label=str(weight),
+                    style=style,
+                    color=color,
+                    penwidth=penwidth
+                )
         
         graph.view()
 
